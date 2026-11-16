@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — EduTrack</title>
+<meta name="description" content="Sign in to your EduTrack account.">
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<header class="pub-nav"><div class="pub-nav-in">
+  <a href="login.html" class="pub-brand"><span class="sb-logo-ico" data-icon><i class="fas fa-graduation-cap"></i></span><span data-brand>EduTrack <em>Pro</em></span></a>
+  <button class="theme-btn pub-toggle" onclick="document.getElementById('pubLinks').classList.toggle('open')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  <nav class="pub-links" id="pubLinks"><a href="login.html" class="active">Login</a><a href="register.html" class="btn btn-primary btn-sm">Register</a><button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" id="themeBtn"><i class="fas fa-moon"></i></button></nav>
+</div></header>
+
+<div id="loginPage" style="min-height:calc(100vh - 62px)">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo-wrap" data-icon><i class="fas fa-graduation-cap"></i></div>
+      <h1 data-brand>EduTrack <em>Pro</em></h1>
+      <p data-tagline>Student Management System</p>
+    </div>
+    <div id="formMsg"></div>
+    <form id="loginForm">
+      <div class="fg"><label><i class="fas fa-user"></i> User ID / Email</label><input name="id" id="li" placeholder="Admin ID, Teacher ID, Student ID or Email" autocomplete="username" required></div>
+      <div class="fg"><label><i class="fas fa-lock"></i> Password</label>
+        <div class="pw-wrap"><input type="password" name="pw" id="lp" placeholder="Your password" required autocomplete="current-password"><button type="button" class="pw-eye" onclick="togglePw('lp')"><i class="fas fa-eye"></i></button></div></div>
+      <button type="submit" class="btn btn-primary btn-full" id="formBtn" style="margin-top:6px"><span class="btext">Sign In <i class="fas fa-arrow-right"></i></span><span class="spin"></span></button>
+    </form>
+    <p style="text-align:center;margin-top:18px;font-size:.84rem;color:var(--text3)">New student? <a href="register.html" style="color:var(--accent);font-weight:600">Request admission</a></p>
+    <div class="login-hints" id="loginHints" style="display:none"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:.75rem">
+      <div><strong><i class="fas fa-shield-alt"></i> Admin</strong><br>ID: <code>admin</code></div>
+      <div><strong><i class="fas fa-chalkboard-teacher"></i> Teacher</strong><br>Teacher ID / Email</div>
+      <div><strong><i class="fas fa-user-graduate"></i> Student</strong><br>Student ID / Email</div></div></div>
+  </div>
+</div>
+<footer class="pub-footer"><div class="pub-wrap">© <span id="yr"></span> <span data-brand-text>EduTrack</span> · <span data-tagline>Student Management System</span></div></footer>
+<script src="js/script.js?v=5"></script>
+</body>
+</html>

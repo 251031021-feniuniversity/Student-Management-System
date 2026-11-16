@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — EduTrack</title>
+<meta name="description" content="Request admission to the institution.">
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<header class="pub-nav"><div class="pub-nav-in">
+  <a href="login.html" class="pub-brand"><span class="sb-logo-ico" data-icon><i class="fas fa-graduation-cap"></i></span><span data-brand>EduTrack <em>Pro</em></span></a>
+  <button class="theme-btn pub-toggle" onclick="document.getElementById('pubLinks').classList.toggle('open')" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  <nav class="pub-links" id="pubLinks"><a href="login.html">Login</a><a href="register.html" class="btn btn-primary btn-sm">Register</a><button class="theme-btn" onclick="toggleTheme()" title="Toggle theme" id="themeBtn"><i class="fas fa-moon"></i></button></nav>
+</div></header>
+
+<div class="pub-page-title pub-wrap"><h1>Request Admission</h1><p>Fill in the form. After the administrator approves your request you can sign in with your <strong>email and password</strong>.</p></div>
+<div class="pub-wrap"><div class="card pub-form"><div class="card-body">
+  <div id="formMsg"></div>
+  <form id="registerForm">
+    <div class="form-row">
+      <div class="fg"><label>Full Name *</label><input name="name" required maxlength="150" placeholder="Md. Rahim Uddin"></div>
+      <div class="fg"><label>Email *</label><input type="email" name="email" required maxlength="150" placeholder="you@email.com"></div>
+      <div class="fg"><label>Mobile</label><input name="mobile" maxlength="30" placeholder="01XXXXXXXXX"></div>
+      <div class="fg"><label>Class / Course</label><input name="class" maxlength="100" placeholder="Class 10 / CSE"></div>
+      <div class="fg"><label>Batch</label><input name="batch" maxlength="30" placeholder="2025"></div>
+      <div class="fg"><label>Address</label><input name="address" maxlength="500"></div>
+      <div class="fg"><label>Password * (min 6)</label><div class="pw-wrap"><input type="password" name="password" id="rp1" required minlength="6"><button type="button" class="pw-eye" onclick="togglePw('rp1')"><i class="fas fa-eye"></i></button></div></div>
+      <div class="fg"><label>Confirm Password *</label><div class="pw-wrap"><input type="password" name="confirm" id="rp2" required minlength="6"><button type="button" class="pw-eye" onclick="togglePw('rp2')"><i class="fas fa-eye"></i></button></div></div>
+    </div>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="btn btn-success btn-full" id="formBtn"><span class="btext"><i class="fas fa-user-plus"></i> Submit Request</span><span class="spin"></span></button>
+    <p style="text-align:center;margin-top:16px;font-size:.84rem;color:var(--text3)">Already have an account? <a href="login.html" style="color:var(--accent);font-weight:600">Sign in</a></p>
+  </form>
+</div></div></div>
+<footer class="pub-footer"><div class="pub-wrap">© <span id="yr"></span> <span data-brand-text>EduTrack</span> · <span data-tagline>Student Management System</span></div></footer>
+<script src="js/script.js?v=5"></script>
+</body>
+</html>

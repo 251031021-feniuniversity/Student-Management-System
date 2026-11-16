@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+<div id="toastBox"></div>
+
+<!-- DASHBOARD (shown after login) -->
+<div id="appPage" style="display:none">
+  <div class="sb-overlay" id="overlay" onclick="closeSB()"></div>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-header"><div class="sb-logo">
+        <div class="sb-logo-ico" id="appIco"><i class="fas fa-graduation-cap"></i></div>
+        <div class="sb-logo-text"><h2 id="appName">EduTrack</h2><p id="appTagline">Student Management</p></div>
+      </div></div>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatar"></div>
+        <div><div class="sb-uname" id="sbName">—</div><div class="sb-urole" id="sbRole">—</div></div>
+        <span class="sb-role-badge" id="sbBadge"></span>
+      </div>
+      <nav class="sb-nav" id="sbNav"></nav>
+      <div class="sb-bottom">
+        <button class="sb-signout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme"><i class="fas fa-moon"></i></button>
+      </div>
+    </aside>
+    <main class="main" id="mainContent"></main>
+  </div>
+
+  <!-- Global modals -->
+  <div class="modal-bg" id="editStuModal"><div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-edit" style="color:var(--accent2)"></i> Edit Student</h3><button class="modal-x" onclick="closeModal('editStuModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><form onsubmit="saveEditStu(event)">
+      <input type="hidden" id="es_sid">
+      <div class="form-row">
+        <div class="fg"><label>Full Name</label><input id="es_name" required></div>
+        <div class="fg"><label>Email</label><input type="email" id="es_email" required></div>
+        <div class="fg"><label>Class</label><input id="es_class"></div>
+        <div class="fg"><label>Batch</label><input id="es_batch"></div>
+        <div class="fg"><label>Mobile</label><input id="es_mobile"></div>
+        <div class="fg"><label>Date of Birth</label><input type="date" id="es_dob"></div>
+        <div class="fg span2"><label>Photo URL</label><input id="es_img"></div>
+        <div class="fg span2"><label>Address</label><textarea id="es_address"></textarea></div>
+      </div>
+      <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal('editStuModal')">Cancel</button><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button></div>
+    </form></div>
+  </div></div>
+
+  <div class="modal-bg" id="stuPwModal"><div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-key" style="color:var(--accent2)"></i> Reset Student Password</h3><button class="modal-x" onclick="closeModal('stuPwModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><form onsubmit="saveStuPw(event)">
+      <input type="hidden" id="spw_sid">
+      <div class="fg"><label>Student</label><input id="spw_name" disabled style="opacity:.6"></div>
+      <div class="fg"><label>New Password * (min 6)</label><div class="pw-wrap"><input type="password" id="spw_new" required minlength="6"><button type="button" class="pw-eye" onclick="togglePw('spw_new')"><i class="fas fa-eye"></i></button></div></div>
+      <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal('stuPwModal')">Cancel</button><button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Update Password</button></div>
+    </form></div>
+  </div></div>
+
+  <div class="modal-bg" id="editTchModal"><div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-edit" style="color:var(--accent2)"></i> Edit Teacher</h3><button class="modal-x" onclick="closeModal('editTchModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><form onsubmit="saveEditTch(event)">
+      <input type="hidden" id="et_tid">
+      <div class="form-row">
+        <div class="fg"><label>Full Name</label><input id="et_name" required></div>
+        <div class="fg"><label>Email</label><input type="email" id="et_email" required></div>
+        <div class="fg"><label>Subject</label><input id="et_subject"></div>
+        <div class="fg"><label>Mobile</label><input id="et_mobile"></div>
+      </div>
+      <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal('editTchModal')">Cancel</button><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button></div>
+    </form></div>
+  </div></div>
+
+  <div class="modal-bg" id="tchPwModal"><div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-key" style="color:var(--accent2)"></i> Reset Teacher Password</h3><button class="modal-x" onclick="closeModal('tchPwModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><form onsubmit="saveTchPw(event)">
+      <input type="hidden" id="tpw_tid">
+      <div class="fg"><label>Teacher</label><input id="tpw_name" disabled style="opacity:.6"></div>
+      <div class="fg"><label>New Password * (min 6)</label><div class="pw-wrap"><input type="password" id="tpw_new" required minlength="6"><button type="button" class="pw-eye" onclick="togglePw('tpw_new')"><i class="fas fa-eye"></i></button></div></div>
+      <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal('tchPwModal')">Cancel</button><button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Update</button></div>
+    </form></div>
+  </div></div>
+
+  <div class="modal-bg" id="tchAccessModal"><div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-shield-alt" style="color:var(--purple)"></i> Teacher Permissions</h3><button class="modal-x" onclick="closeModal('tchAccessModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="ta_tid">
+      <div class="access-item"><div class="access-label"><h4><i class="fas fa-file-alt"></i> Enter / Give Results</h4><p>Can add exam results for students</p></div><label class="toggle"><input type="checkbox" id="ta_result"><span class="toggle-slider"></span></label></div>
+      <div class="access-item"><div class="access-label"><h4><i class="fas fa-calendar-check"></i> Mark Attendance</h4><p>Can take/mark daily attendance</p></div><label class="toggle"><input type="checkbox" id="ta_att"><span class="toggle-slider"></span></label></div>
+      <div class="access-item"><div class="access-label"><h4><i class="fas fa-bullhorn"></i> Publish Notices</h4><p>Can post notices for students</p></div><label class="toggle"><input type="checkbox" id="ta_notice"><span class="toggle-slider"></span></label></div>
+      <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal('tchAccessModal')">Cancel</button><button class="btn btn-purple" onclick="saveTchAccess()"><i class="fas fa-save"></i> Save Permissions</button></div>
+    </div>
+  </div></div>
+</div>
+
+
+<script src="js/app.js?v=5"></script>
+</body>
+</html>
