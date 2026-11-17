@@ -1,456 +1,593 @@
-# EduTrack Pro — Student Management System
+<div align="center">
 
-A web-based Student Management System built with **PHP, MySQL, HTML, CSS and JavaScript**. It provides separate access for administrators, teachers and students, with student records, attendance, results, notices, fees and bKash payment support.
+<table>
+<tr><td align="center" bgcolor="#102A43">
+
+# <font color="#FFFFFF">EDUTRACK PRO</font>
+## <font color="#FFFFFF">STUDENT MANAGEMENT SYSTEM</font>
+
+<font color="#D9EAF7">PROFESSIONAL PROJECT DOCUMENTATION • DATABASE DESIGN • IMPLEMENTATION GUIDE</font>
+
+</td></tr>
+</table>
+
+### A Web-Based Academic Administration Platform
+
+</div>
+
+<table>
+<tr><th colspan="2" align="center">STUDENT PROFILE</th></tr>
+<tr><td width="38%"><b>Student ID</b></td><td><b>251031021</b></td></tr>
+<tr><td><b>Department</b></td><td>Computer Science &amp; Engineering (CSE)</td></tr>
+<tr><td><b>Program</b></td><td>Undergraduate (UG)</td></tr>
+<tr><td><b>Batch</b></td><td><b>34</b></td></tr>
+<tr><td><b>Project Title</b></td><td>EduTrack Pro — Student Management System</td></tr>
+</table>
+
+<div align="center">
+
+![PHP](https://img.shields.io/badge/Backend-PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/Frontend-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-Structure-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
+</div>
+
+> **ACADEMIC SUBMISSION DOCUMENT**  
+> This document explains the system overview, features, architecture, database tables, SQL implementation, application workflow, installation, testing and deployment considerations.
 
 ---
 
-## 1. Project Information
-
-| Item | Details |
-|---|---|
-| Project Name | EduTrack Pro — Student Management System |
-| Developer | Tarek |
-| Student ID | 251031021 |
-| Backend | PHP |
-| Frontend | HTML, CSS, JavaScript |
-| Database | MySQL |
-| Database Engine | InnoDB |
-| Character Set | utf8mb4 |
-| Payment Integration | bKash Tokenized Checkout (sandbox configuration in the supplied project) |
-
-> The developer name and student ID above are the project details supplied for this documentation.
-
-## 2. Project Objectives
-
-- Store and manage student information in one database.
-- Provide role-based access for administrators, teachers and students.
-- Record attendance and academic results.
-- Publish notices and manage student fee records.
-- Allow students to submit admission/registration requests.
-- Support online fee payment through bKash and generate payment invoices.
-- Reduce manual record keeping and make student information easier to manage.
-
-## 3. Technologies Used
-
-| Technology | Purpose |
-|---|---|
-| HTML5 | Page structure |
-| CSS3 | Layout, styling and responsive interface |
-| JavaScript | Frontend interaction and API requests |
-| PHP | Backend logic and API endpoints |
-| MySQL | Persistent data storage |
-| PDO | PHP database connection and prepared queries |
-| bKash Tokenized Checkout | Online payment workflow |
-| Apache `.htaccess` | Restrict direct access to selected folders |
-
-## 4. Main Features
-
-### Administrator
-- Admin login.
-- Add, update and delete student records.
-- Add, update and delete teacher accounts.
-- Set teacher permissions for attendance, results and notices.
-- Review admission requests, approve them and assign Student IDs, or reject them.
-- Add attendance and manage student attendance records.
-- Add and delete academic results.
-- Create notices and delete notices.
-- Create fees for one student or all students.
-- Record fee payments and track outstanding balances.
-- View payment information and invoices.
-- Update application name, branding, colours and password-change settings.
-- Change the administrator password.
-- Reset system data (a destructive action).
-
-### Teacher
-- Teacher login.
-- View student information.
-- Use only the functions permitted by the administrator.
-- Mark attendance when permitted.
-- Add results and manage their own result entries when permitted.
-- Publish notices when permitted.
-
-### Student
-- Submit an admission/registration request.
-- Log in using Student ID or email.
-- View their own profile and academic information.
-- View attendance and results.
-- View fee information and outstanding amounts.
-- Pay eligible fees through bKash.
-- View and print/download a completed payment invoice.
-- Change their password if the administrator allows it.
-
-### General Interface
-- Dashboard for the logged-in user.
-- Light/dark theme support.
-- Application branding and configurable colours.
-- Charts and summary information in the dashboard.
-- Separate login, registration, dashboard, payment and invoice pages.
-
-## 5. User Roles and Permissions
-
-| Role | Main access |
-|---|---|
-| Admin | Full system management |
-| Teacher | Student/academic information and permission-controlled attendance, results and notices |
-| Student | Own profile, attendance, results, fees and payments |
-
-The backend checks roles and permissions. Hiding a button in the frontend is not the only access control.
-
-## 6. Project Folder Structure
-
-```text
-project/
-├── index.html
-├── README.md
-├── frontend/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   ├── app.html
-│   ├── pay.html
-│   ├── invoice.html
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   ├── app.js
-│   │   ├── common.js
-│   │   ├── script.js
-│   │   ├── pay.js
-│   │   └── invoice.js
-│   └── images/
-├── backend/
-│   ├── index.php
-│   ├── bkash_callback.php
-│   ├── bkash_test.php
-│   ├── controllers/
-│   ├── routes/
-│   │   └── api.php
-│   └── server/
-│       ├── config.php
-│       ├── database.php
-│       ├── helpers.php
-│       ├── router.php
-│       └── bkash.php
-└── database/
-    └── database.sql
-```
-
-## 7. Database Design — SQL Tables
-
-The supplied `database/database.sql` creates **9 tables**. The backend uses these tables:
-
-### 7.1 `users`
-Stores login accounts for administrators, teachers and students.
-
-| Column | Purpose |
-|---|---|
-| `uid` | Unique login ID / primary key |
-| `password` | Password hash |
-| `role` | Account role: admin, teacher or student |
-| `name` | User name |
-| `email` | Email address |
-| `subject` | Teacher's subject, where applicable |
-| `mobile` | Mobile number |
-| `can_result` | Teacher result permission |
-| `can_att` | Teacher attendance permission |
-| `can_notice` | Teacher notice permission |
-| `created_at` | Account creation time |
-
-### 7.2 `students`
-Stores student profile and personal information.
-
-| Column | Purpose |
-|---|---|
-| `sid` | Student ID / primary key |
-| `n` | Auto-increment serial number |
-| `name` | Student name |
-| `email` | Email |
-| `class_name` | Class/program |
-| `batch` | Batch |
-| `mobile` | Mobile number |
-| `address` | Address |
-| `dob` | Date of birth |
-| `img` | Profile image URL |
-| `joined` | Joining date |
-
-### 7.3 `results`
-Stores student examination results.
-
-| Column | Purpose |
-|---|---|
-| `id` | Result record ID |
-| `sid` | Related Student ID |
-| `subject` | Subject name |
-| `exam` | Examination name |
-| `marks` | Obtained marks |
-| `total` | Total marks |
-| `exam_date` | Examination/result date |
-| `added_by` | User ID of the account that added the result |
-
-### 7.4 `attendance`
-Stores daily attendance records.
-
-| Column | Purpose |
-|---|---|
-| `id` | Attendance record ID |
-| `sid` | Related Student ID |
-| `att_date` | Attendance date |
-| `status` | `present` or `absent` |
-| `marked_by` | Name of the person who marked attendance |
-
-A unique key on (`sid`, `att_date`) prevents multiple attendance rows for the same student on the same date. The application updates the existing row when attendance is marked again.
-
-### 7.5 `notices`
-Stores notices published by authorized users.
-
-| Column | Purpose |
-|---|---|
-| `id` | Notice ID |
-| `title` | Notice title |
-| `body` | Notice details |
-| `priority` | low, medium or high |
-| `created_at` | Publication time |
-| `by_name` | Publisher name |
-
-### 7.6 `settings`
-Stores configurable application settings.
-
-| Column | Purpose |
-|---|---|
-| `k` | Setting key / primary key |
-| `v` | Setting value (configuration is stored as text/JSON) |
-
-### 7.7 `registrations`
-Stores public admission/registration requests before admin approval.
-
-| Column | Purpose |
-|---|---|
-| `id` | Registration request ID |
-| `name` | Applicant name |
-| `email` | Applicant email |
-| `mobile` | Mobile number |
-| `class_name` | Class/program |
-| `batch` | Batch |
-| `address` | Address |
-| `pw_hash` | Hashed password for the future account |
-| `created_at` | Request time |
-
-### 7.8 `fees`
-Stores fees assigned to students and payment progress.
-
-| Column | Purpose |
-|---|---|
-| `id` | Fee ID |
-| `sid` | Related Student ID |
-| `title` | Fee title |
-| `amount` | Total fee amount |
-| `paid` | Amount already paid |
-| `due_date` | Payment due date |
-| `paid_date` | Date a payment was recorded |
-
-Outstanding balance is calculated as `amount - paid`.
-
-### 7.9 `bkash_payments`
-Stores bKash payment attempts and verification details.
-
-| Column | Purpose |
-|---|---|
-| `id` | Payment record ID |
-| `payment_id` | bKash payment ID |
-| `fee_id` | Related fee record |
-| `sid` | Related Student ID |
-| `amount` | Payment amount |
-| `status` | Payment status, initially `pending` |
-| `trx_id` | bKash transaction ID |
-| `payer` | Payer's bKash number |
-| `created_at` | Payment creation time |
-
-## 8. SQL Concepts Used
-
-The database script uses the following SQL features:
-
-- `CREATE TABLE IF NOT EXISTS` — creates a table if it does not already exist.
-- `INT`, `VARCHAR`, `TEXT`, `DATE`, `DATETIME`, `TIMESTAMP`, `TINYINT` — column data types.
-- `PRIMARY KEY` — uniquely identifies each row.
-- `AUTO_INCREMENT` — automatically generates numeric IDs.
-- `NOT NULL` — requires a value.
-- `DEFAULT` — provides a default value.
-- `UNIQUE KEY` — prevents duplicate values or combinations.
-- `KEY` / index — supports faster lookups.
-- `FOREIGN KEY` — connects related tables.
-- `ON DELETE CASCADE` — removes dependent records when a referenced student or fee is deleted.
-- `ON UPDATE CASCADE` — propagates updates to referenced IDs.
-- `ENGINE=InnoDB` — enables transactions and foreign-key support.
-- `DEFAULT CHARSET=utf8mb4` — supports Unicode text, including Bangla.
-
-## 9. Table Relationships
-
-- `students.sid` is referenced by `results.sid`.
-- `students.sid` is referenced by `attendance.sid`.
-- `students.sid` is referenced by `fees.sid`.
-- `fees.id` is referenced by `bkash_payments.fee_id`.
-- `users.uid` is used by the application as the login identity and is associated with student/teacher IDs through application logic.
-- `registrations` holds pending applicants until an administrator approves them and creates the corresponding user and student records.
-
-The SQL file defines foreign keys for results, attendance, fees and bKash fee records. Other associations are handled by the PHP application.
-
-## 10. Default Admin Account
-
-The SQL file seeds this initial administrator account:
-
-| Login ID | Initial password |
-|---|---|
-| `admin` | `admin123` |
-
-**Change the initial password immediately after the first login.** Never use the default password on a public or production website.
-
-## 11. How the Database Is Installed
-
-The database name and database user must first be created in the hosting control panel.
-
-1. Open `backend/server/config.php`.
-2. Set the correct database host, database name, database username and database password.
-3. Create the database and user in cPanel and grant the user the required privileges.
-4. Either import `database/database.sql` through phpMyAdmin, or allow the backend's database installer to create the tables on its first connection.
-5. The database itself must already exist; the PHP installer creates the tables inside the configured database.
-
-## 12. How to Import SQL Using phpMyAdmin
-
-1. Log in to cPanel.
-2. Open **phpMyAdmin**.
-3. Select the database created for this project.
-4. Click the **Import** tab.
-5. Choose `database/database.sql`.
-6. Keep the SQL format selected.
-7. Click **Import** or **Go**.
-8. Confirm that the nine tables appear in the database.
-
-## 13. Application Workflow
-
-### Admission workflow
-1. Applicant opens the registration page.
-2. Applicant submits their information.
-3. The request is stored in `registrations`.
-4. Admin reviews the request.
-5. Admin approves it and assigns a Student ID, or rejects it.
-6. On approval, the application creates the login account in `users` and profile in `students`.
-
-### Attendance workflow
-1. Authorized admin/teacher selects a date.
-2. Attendance is submitted for students.
-3. Records are inserted or updated in `attendance`.
-4. Students can view their own attendance.
-
-### Result workflow
-1. Authorized user selects a student.
-2. Subject, exam, marks and total marks are submitted.
-3. The record is saved in `results`.
-4. Students can view their own results.
-
-### Fee and bKash workflow
-1. Admin assigns a fee to one student or all students.
-2. Student opens their fee information.
-3. Student starts a bKash payment.
-4. Backend creates a payment request with bKash.
-5. bKash sends the user through its checkout process.
-6. The callback handler verifies the payment with bKash.
-7. A verified payment is recorded as completed and the fee payment progress is updated.
-8. Student can open the invoice page and print/download the invoice.
-
-A payment must not be treated as successful merely because the browser returns to the website. The server-side verification is important.
-
-## 14. API Overview
-
-The API entry point is:
-
-```text
-backend/index.php?api=ACTION
-```
-
-The route map is in `backend/routes/api.php`.
-
-| API action | Purpose |
-|---|---|
-| `init` | Initial session, CSRF token and application settings |
-| `login` / `logout` | Authentication |
-| `register_submit` | Submit an admission request |
-| `bootstrap` | Load dashboard data |
-| `student_add` / `student_update` / `student_delete` | Student management |
-| `student_pw` | Admin resets a student's password |
-| `teacher_add` / `teacher_update` / `teacher_delete` | Teacher management |
-| `teacher_pw` | Admin resets a teacher's password |
-| `teacher_access` | Update teacher permissions |
-| `att_save` | Save attendance |
-| `result_add` / `result_delete` | Manage results |
-| `notice_add` / `notice_delete` | Manage notices |
-| `fee_add` / `fee_pay` / `fee_delete` | Manage fees |
-| `bkash_create` | Start a student bKash payment |
-| `invoice_get` | Retrieve a completed payment invoice |
-| `cfg_save` | Save application settings |
-| `self_pw` | Change the current user's password |
-| `reset_system` | Reset selected system data |
-| `request_approve` / `request_reject` | Process admission requests |
-
-The API uses POST requests for application actions. Authenticated routes require a valid session; the backend also checks roles and permissions.
-
-## 15. Security Measures Present in the Code
-
-- Passwords are stored using PHP password hashing and verified with `password_verify()`.
-- Database operations use PDO prepared statements.
-- Session IDs are regenerated after successful login.
-- Session cookies use `HttpOnly` and `SameSite=Lax`; the `Secure` flag is enabled when HTTPS is detected.
-- CSRF tokens are created for the session and checked by the request router.
-- Login attempts are temporarily locked after repeated failures.
-- Public registration and payment actions use rate limiting.
-- The public registration form includes a honeypot field.
-- Server-side role and permission checks protect restricted actions.
-- `.htaccess` files restrict direct access to selected backend and database folders.
-
-## 16. Requirements
-
-- PHP 7.4 or newer (PHP 8.x recommended).
-- MySQL or MariaDB.
-- PHP extensions: `pdo_mysql`, `mbstring`, and cURL for bKash connectivity.
-- Apache hosting with `.htaccess` support, or equivalent server access rules.
-- HTTPS is required for the bKash payment callback workflow.
-- A bKash merchant account and valid merchant credentials are required for live payments.
-
-## 17. Local / cPanel Setup
-
-1. Install a local PHP/MySQL environment such as XAMPP, or prepare a cPanel hosting account.
-2. Create a MySQL database and database user.
-3. Configure database connection values in `backend/server/config.php`.
-4. Import `database/database.sql` through phpMyAdmin, or let the backend installer create its tables.
-5. Keep `frontend/` and `backend/` side by side because frontend scripts call `../backend/index.php`.
-6. Open `frontend/login.html` through the local web server or your domain.
-7. Sign in with the initial admin account and change its password.
-
-Do not open the PHP application by double-clicking the HTML files; run it through a PHP-enabled web server.
-
-## 18. Important Security Warning Before Publishing to GitHub
-
-**Check `backend/server/config.php` before pushing this project to GitHub.** The supplied project archive contains database connection credentials and bKash sandbox credentials in that file. Do not publish real database passwords, API secrets, or merchant credentials in a public repository.
-
-- Change/rotate any database password that has already been included in a shared ZIP or pushed to a repository.
-- Keep production secrets outside the public repository (for example, in server environment variables or a protected server-side configuration file).
-- Use a safe example configuration file for GitHub, with placeholder values only.
-- Use live bKash credentials only on the server and never commit them.
-- Remove temporary diagnostic files such as `backend/bkash_test.php` from a production deployment after testing.
-- Use HTTPS and change the default admin password.
-
-## 19. Limitations / Notes
-
-- The supplied configuration is set to bKash sandbox mode; real payments require approved merchant credentials and live configuration.
-- The project uses a MySQL database; it is not an SQLite project.
-- Some dashboard calculations and presentation logic are implemented in frontend JavaScript, while data validation and access checks are performed in PHP.
-- The actual deployment domain, production credentials and live payment status must be configured by the project owner.
-
-## 20. Developer
-
-**Name:** Tarek  
-**Student ID:** 251031021  
-**Project:** EduTrack Pro — Student Management System
+## 01 · PROJECT AT A GLANCE
+
+<table>
+<tr><th align="left">Project Information</th><th align="left">Description</th></tr>
+<tr><td><b>System Type</b></td><td>Web-Based Student &amp; Academic Information Management System</td></tr>
+<tr><td><b>User Roles</b></td><td>Administrator, Teacher and Student</td></tr>
+<tr><td><b>Core Modules</b></td><td>Students, Teachers, Attendance, Results, Notices, Fees and Admissions</td></tr>
+<tr><td><b>Payment Module</b></td><td>bKash Tokenized Checkout — sandbox/test configuration</td></tr>
+<tr><td><b>Database</b></td><td>MySQL (InnoDB, relational constraints)</td></tr>
+<tr><td><b>Runtime</b></td><td>PHP with Apache; XAMPP or compatible cPanel hosting</td></tr>
+</table>
+
+### Project Overview
+
+EduTrack Pro is a web-based Student Management System developed to organize common academic and administrative activities in one platform. It provides role-based access for administrators, teachers and students. Authorized users can manage student and teacher information, record attendance, publish examination results, share notices and maintain fee records.
+
+The system also includes a public admission-request form and a bKash payment workflow. The frontend uses HTML, CSS and JavaScript, the backend is developed in PHP, and MySQL is used for persistent data storage.
+
+### Project Objectives
+
+| No. | Objective | Expected Benefit |
+|---:|---|---|
+| 01 | Centralize student and teacher records | Organized academic information |
+| 02 | Provide role-based access | Controlled system operations |
+| 03 | Maintain attendance records | Easier attendance monitoring |
+| 04 | Store examination results | Structured result management |
+| 05 | Track fees and payments | Clear payment and due information |
+| 06 | Publish notices and receive admission requests | Improved information flow |
+
+### Main Modules
+
+<table>
+<tr><th>Module</th><th>Key Functions</th></tr>
+<tr><td>Authentication</td><td>Login, logout and role-based access</td></tr>
+<tr><td>Student Management</td><td>Add, update, delete and manage student records</td></tr>
+<tr><td>Teacher Management</td><td>Manage teacher profiles and permissions</td></tr>
+<tr><td>Attendance</td><td>Save and review daily attendance records</td></tr>
+<tr><td>Results</td><td>Record examination marks; application calculates grade/GPA</td></tr>
+<tr><td>Notices</td><td>Publish and remove announcements</td></tr>
+<tr><td>Fees</td><td>Create fee records, record payments and track dues</td></tr>
+<tr><td>Online Payment</td><td>bKash Tokenized Checkout workflow</td></tr>
+<tr><td>Admission</td><td>Receive and process admission requests</td></tr>
+<tr><td>Settings</td><td>Update system settings and account password</td></tr>
+</table>
 
 ---
 
-*Documentation prepared from the supplied project source files and SQL schema.*
+## 02 · TECHNOLOGY STACK
+
+| Layer | Technology | Responsibility |
+|---|---|---|
+| Frontend | HTML5 | Page structure |
+| Frontend | CSS3 | Layout and visual presentation |
+| Frontend | JavaScript | Client-side interaction and API requests |
+| Backend | PHP | Server-side logic and API handling |
+| Database | MySQL | Persistent relational data storage |
+| Database Access | PDO | Database connectivity and prepared queries |
+| Payment | bKash Tokenized Checkout | Online fee payment workflow |
+| Web Server | Apache | Application hosting and request handling |
+
+---
+
+## 03 · SYSTEM ARCHITECTURE
+
+The browser-based frontend sends requests to the PHP API. The backend routes requests to the relevant controller, performs authentication and permission checks, communicates with MySQL through PDO, and returns a response to the frontend.
+
+```mermaid
+flowchart TD
+    A[Admin / Teacher / Student] --> B[Web Browser]
+    B --> C[Frontend: HTML, CSS, JavaScript]
+    C --> D[PHP API Entry Point]
+    D --> E[Authentication and CSRF Validation]
+    E --> F[Controllers and Business Logic]
+    F --> G[(MySQL Database)]
+    F --> H[bKash Payment Gateway]
+    G --> F
+    H --> F
+    F --> C
+    C --> B
+```
+
+### Role & Permission Matrix
+
+| Functionality | Administrator | Teacher | Student |
+|---|:---:|:---:|:---:|
+| Manage student records | ✓ | Permission-based | — |
+| Manage teacher records | ✓ | — | — |
+| Record attendance | ✓ | Permission-based | — |
+| Manage examination results | ✓ | Permission-based | — |
+| Publish notices | ✓ | Permission-based | — |
+| View personal academic information | ✓ | ✓ | ✓ |
+| View fee information | ✓ | — | ✓ |
+| Use student payment workflow | — | — | ✓ |
+
+*Teacher permissions for results, attendance and notices can be controlled by the administrator. The matrix is a high-level summary; actual access is enforced by backend controller permissions.*
+
+---
+
+## 04 · PROJECT DIRECTORY STRUCTURE
+
+```text
+student-management/
+└── project/
+    ├── index.html
+    ├── README.md
+    ├── frontend/
+    │   ├── index.html
+    │   ├── login.html
+    │   ├── register.html
+    │   ├── app.html
+    │   ├── pay.html
+    │   ├── invoice.html
+    │   ├── css/style.css
+    │   ├── js/
+    │   │   ├── script.js
+    │   │   ├── app.js
+    │   │   ├── common.js
+    │   │   ├── pay.js
+    │   │   └── invoice.js
+    │   └── images/
+    ├── backend/
+    │   ├── index.php
+    │   ├── bkash_callback.php
+    │   ├── bkash_test.php
+    │   ├── server/
+    │   ├── routes/api.php
+    │   └── controllers/
+    └── database/database.sql
+```
+
+> **DIRECTORY NOTE**  
+> Keep `frontend/`, `backend/` and `database/` in their existing relative positions. The frontend communicates with `../backend/index.php`.
+
+---
+
+## 05 · DATABASE DESIGN
+
+The supplied SQL file is `database/database.sql`. It defines **9 relational tables** using InnoDB and `utf8mb4` character encoding.
+
+### Entity Relationship Diagram (ERD)
+
+```mermaid
+erDiagram
+    STUDENTS ||--o{ RESULTS : receives
+    STUDENTS ||--o{ ATTENDANCE : has
+    STUDENTS ||--o{ FEES : assigned
+    FEES ||--o{ BKASH_PAYMENTS : paid_through
+
+    STUDENTS {
+        varchar sid PK
+        varchar name
+        varchar email
+        varchar class_name
+        varchar batch
+        varchar mobile
+        date joined
+    }
+    RESULTS {
+        int id PK
+        varchar sid FK
+        varchar subject
+        varchar exam
+        int marks
+        int total
+        date exam_date
+    }
+    ATTENDANCE {
+        int id PK
+        varchar sid FK
+        date att_date
+        varchar status
+    }
+    FEES {
+        int id PK
+        varchar sid FK
+        varchar title
+        int amount
+        int paid
+        date due_date
+    }
+    BKASH_PAYMENTS {
+        int id PK
+        varchar payment_id UK
+        int fee_id FK
+        varchar sid
+        int amount
+        varchar status
+        varchar trx_id
+    }
+```
+
+### Database Table Dictionary
+
+| No. | Table Name | Purpose | Primary / Key Fields |
+|---:|---|---|---|
+| 01 | `users` | User login accounts and roles | `uid` (PK), `role`, `name`, `email` |
+| 02 | `students` | Student profile information | `sid` (PK), `name`, `class_name`, `batch` |
+| 03 | `results` | Examination records | `id` (PK), `sid` (FK), `subject`, `marks`, `total` |
+| 04 | `attendance` | Daily attendance records | `id` (PK), `sid` (FK), `att_date`, `status` |
+| 05 | `notices` | System announcements | `id` (PK), `title`, `body`, `priority` |
+| 06 | `settings` | Application key-value settings | `k` (PK), `v` |
+| 07 | `registrations` | Public admission requests | `id` (PK), `name`, `email`, `pw_hash` |
+| 08 | `fees` | Fee and payment summary records | `id` (PK), `sid` (FK), `amount`, `paid` |
+| 09 | `bkash_payments` | bKash transaction records | `id` (PK), `payment_id` (Unique), `fee_id` (FK) |
+
+### Important Keys & Relationships
+
+| Relationship / Constraint | Description |
+|---|---|
+| `students.sid` | Primary key of the student table |
+| `results.sid` → `students.sid` | Result belongs to a student; cascade on delete/update |
+| `attendance.sid` → `students.sid` | Attendance belongs to a student; cascade on delete/update |
+| `fees.sid` → `students.sid` | Fee belongs to a student; cascade on delete/update |
+| `bkash_payments.fee_id` → `fees.id` | Payment is associated with a fee; cascade on delete |
+| `attendance (sid, att_date)` | Unique pair prevents duplicate attendance for one student/date |
+| `bkash_payments.payment_id` | Unique payment identifier |
+
+---
+
+## 06 · SQL IMPLEMENTATION — STEP BY STEP
+
+> **HOW TO USE THIS SECTION**  
+> Open phpMyAdmin, select the project database, and run the sample queries below. The complete original schema is available in `database/database.sql` and should be imported to create all nine tables.
+
+### Step 01 — Create the Database
+
+**Purpose:** Create a database for the application.
+
+```sql
+CREATE DATABASE edutrack_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE edutrack_db;
+```
+
+### Step 02 — Create All Required Tables
+
+**Purpose:** Build the database structure using the supplied project schema.
+
+1. Open **phpMyAdmin**.
+2. Create or select the database (for example, `edutrack_db`).
+3. Open the **Import** tab.
+4. Choose `database/database.sql` from the project folder.
+5. Click **Import / Go** and wait for completion.
+6. Confirm that all nine tables appear in the database.
+
+```sql
+-- The full CREATE TABLE statements are maintained in:
+-- project/database/database.sql
+-- Import that file instead of recreating a partial schema here.
+```
+
+### Step 03 — Display All Student Records
+
+**Purpose:** Retrieve student details in alphabetical order.
+
+```sql
+SELECT sid, name, email, class_name, batch, mobile, joined
+FROM students
+ORDER BY name ASC;
+```
+
+### Step 04 — Search a Student by ID
+
+**Purpose:** Find a particular student using the unique student ID.
+
+```sql
+SELECT *
+FROM students
+WHERE sid = 'STUDENT_ID';
+```
+
+Replace `STUDENT_ID` with an actual student ID.
+
+### Step 05 — Display Examination Results
+
+**Purpose:** Show the selected student's examination records, newest first.
+
+```sql
+SELECT subject, exam, marks, total, exam_date
+FROM results
+WHERE sid = 'STUDENT_ID'
+ORDER BY exam_date DESC;
+```
+
+### Step 06 — Display Attendance History
+
+**Purpose:** Review attendance records for a selected student.
+
+```sql
+SELECT sid, att_date, status, marked_by
+FROM attendance
+WHERE sid = 'STUDENT_ID'
+ORDER BY att_date DESC;
+```
+
+### Step 07 — Calculate Outstanding Fees
+
+**Purpose:** Calculate due amount by subtracting the paid amount from the total amount.
+
+```sql
+SELECT sid, title, amount, paid,
+       (amount - paid) AS due_amount,
+       due_date
+FROM fees
+WHERE sid = 'STUDENT_ID';
+```
+
+### Step 08 — Display bKash Payment History
+
+**Purpose:** Review recorded payment transactions for a student.
+
+```sql
+SELECT payment_id, fee_id, sid, amount,
+       status, trx_id, created_at
+FROM bkash_payments
+WHERE sid = 'STUDENT_ID'
+ORDER BY created_at DESC;
+```
+
+### Step 09 — Generate an Attendance Summary
+
+**Purpose:** Count attendance records grouped by student and status.
+
+```sql
+SELECT sid, status, COUNT(*) AS total_days
+FROM attendance
+GROUP BY sid, status
+ORDER BY sid, status;
+```
+
+> **SQL SAFETY NOTE**  
+> These are sample read/report queries. Use the authenticated application interface for normal data entry and updates. Back up the database before performing maintenance operations.
+
+---
+
+## 07 · BACKEND API WORKFLOW
+
+The API entry point is `backend/index.php?api=ACTION`. The route map in `backend/routes/api.php` connects each action to its controller method.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant A as PHP API
+    participant R as Router
+    participant C as Controller
+    participant D as MySQL
+
+    U->>F: Performs an action
+    F->>A: Sends API request
+    A->>R: Passes action name
+    R->>R: Checks method, CSRF and login
+    R->>C: Calls controller method
+    C->>D: Executes database query
+    D-->>C: Returns database result
+    C-->>F: Returns response
+    F-->>U: Updates interface
+```
+
+### Selected API Actions
+
+| API Action | Purpose | Access Type |
+|---|---|---|
+| `init` | Initialize public application data | Public |
+| `login` | Authenticate a user | Public |
+| `logout` | End the current session | Public |
+| `register_submit` | Submit an admission request | Public |
+| `bootstrap` | Load dashboard data | Authenticated |
+| `student_add` / `student_update` | Add or update a student | Authenticated / permission checked |
+| `teacher_add` | Add a teacher | Authenticated / permission checked |
+| `att_save` | Save attendance | Authenticated / permission checked |
+| `result_add` | Add an examination result | Authenticated / permission checked |
+| `notice_add` | Publish a notice | Authenticated / permission checked |
+| `fee_add` / `fee_pay` | Manage fee records and payments | Authenticated |
+| `bkash_create` | Start a bKash payment | Authenticated |
+| `invoice_get` | Retrieve invoice information | Authenticated |
+
+The router requires POST requests and a valid CSRF token for actions other than `init`. Controller-level role and permission checks apply to protected operations.
+
+---
+
+## 08 · INSTALLATION & EXECUTION
+
+### System Requirements
+
+| Requirement | Recommended / Required |
+|---|---|
+| Web Server | Apache |
+| Backend Runtime | PHP 7.4 or newer |
+| Database | MySQL or MariaDB |
+| PHP Extensions | `pdo_mysql`, `mbstring` |
+| Payment Connectivity | PHP cURL and HTTPS for bKash integration |
+| Local Environment | XAMPP / WAMP |
+| Hosting | Compatible cPanel hosting |
+
+### Option A — Run with XAMPP
+
+| Step | Action | Details |
+|---:|---|---|
+| 01 | Start services | Open XAMPP and start Apache and MySQL |
+| 02 | Copy project | Extract to `C:\xampp\htdocs\student-management\` |
+| 03 | Create database | Open `http://localhost/phpmyadmin` and create `edutrack_db` |
+| 04 | Import schema | Import `project/database/database.sql` |
+| 05 | Configure connection | Edit `project/backend/server/config.php` |
+| 06 | Open application | Visit the frontend login page |
+
+**Example local database configuration** (adjust to your own environment):
+
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'edutrack_db');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+```
+
+**Application URL:**
+
+```text
+http://localhost/student-management/project/frontend/login.html
+```
+
+### Option B — Deploy on cPanel
+
+1. Create a MySQL database in **cPanel → MySQL Databases**.
+2. Create a database user and grant the required privileges.
+3. Upload the project files to `public_html` or a selected subfolder.
+4. Keep `frontend/`, `backend/` and `database/` in their relative positions.
+5. Update database credentials in `backend/server/config.php`.
+6. Select PHP 7.4 or newer and enable `pdo_mysql` and `mbstring`.
+7. Enable HTTPS using the hosting provider's SSL facility.
+8. Import `database/database.sql` through phpMyAdmin if required.
+9. Open the frontend login page in a browser.
+
+---
+
+## 09 · DEFAULT ADMINISTRATOR ACCOUNT
+
+<table>
+<tr><th align="left">Login Field</th><th align="left">Default Value</th></tr>
+<tr><td>User ID</td><td><code>admin</code></td></tr>
+<tr><td>Password</td><td><code>admin123</code></td></tr>
+<tr><td>Role</td><td><code>admin</code></td></tr>
+</table>
+
+> **IMPORTANT SECURITY WARNING**  
+> Change the default password immediately after the first successful login. Never keep default credentials on a public production website.
+
+---
+
+## 10 · BKASH PAYMENT WORKFLOW
+
+The project includes a bKash Tokenized Checkout integration configured for **sandbox / test mode**.
+
+```mermaid
+flowchart TD
+    A[Student opens My Fees] --> B[Selects a fee]
+    B --> C[Chooses Pay with bKash]
+    C --> D[Backend creates payment]
+    D --> E[bKash checkout]
+    E --> F[Student completes authorization]
+    F --> G[Callback reaches backend]
+    G --> H[Backend verifies payment]
+    H --> I{Verification successful?}
+    I -->|Yes| J[Payment marked completed]
+    I -->|No or pending| K[Payment remains pending or failed]
+    J --> L[Invoice can be viewed or printed]
+```
+
+| Stage | Process |
+|---:|---|
+| 01 | Student opens the fee section and selects a fee |
+| 02 | Student chooses the bKash payment option |
+| 03 | Backend creates a payment request |
+| 04 | Student completes authorization at bKash checkout |
+| 05 | Backend receives the callback and verifies the transaction |
+| 06 | Payment status is updated after successful verification |
+| 07 | Invoice information can be viewed or printed |
+
+> **PAYMENT NOTE**  
+> A payment must be treated as completed only after server-side verification. Live transactions require valid merchant credentials, the production gateway URL, a public HTTPS callback URL and production hosting. Do not use sandbox credentials for live payments.
+
+---
+
+## 11 · SECURITY & MAINTENANCE
+
+| Security Area | Recommended Practice |
+|---|---|
+| Passwords | Store secure password hashes; never store plain-text passwords |
+| Admin Account | Change the default password immediately |
+| Database Credentials | Keep credentials private and outside public documentation |
+| Transport | Use HTTPS for public deployment |
+| SQL Queries | Use PDO prepared statements |
+| API Protection | Require authentication and CSRF validation for protected actions |
+| Permissions | Enforce role and permission checks on the backend |
+| Diagnostics | Remove or restrict diagnostic scripts such as `backend/bkash_test.php` after troubleshooting |
+| Backups | Maintain regular database backups |
+| Shared Archives | Never distribute real database passwords or private merchant credentials; rotate exposed secrets |
+
+---
+
+## 12 · SYSTEM TESTING CHECKLIST
+
+| No. | Test Scenario | Expected Result |
+|---:|---|---|
+| 01 | Open login page | Login interface loads correctly |
+| 02 | Submit valid credentials | Appropriate dashboard opens |
+| 03 | Submit invalid credentials | Access is denied |
+| 04 | Add a student as an authorized admin | Student record is saved |
+| 05 | Record attendance | Attendance is stored for the selected date |
+| 06 | Add examination marks | Result record is saved |
+| 07 | Publish a notice | Notice appears in the application |
+| 08 | Create a fee record | Fee is associated with a student |
+| 09 | Check fee due | Due is calculated as amount minus paid |
+| 10 | Complete a sandbox bKash payment | Backend verifies and updates payment status |
+| 11 | Open an invoice | Invoice information is displayed |
+
+---
+
+## 13 · LIMITATIONS & DEPLOYMENT NOTES
+
+- The supplied bKash configuration is intended for sandbox testing; live payment processing requires production credentials and configuration.
+- The application requires a functioning PHP and MySQL hosting environment.
+- Database schema and API descriptions in this document are based on the supplied project files.
+- Hosting-specific credentials and settings must be configured before deployment.
+- Back up the database before maintenance, migration or reset operations.
+
+---
+
+## 14 · CONCLUSION
+
+EduTrack Pro brings several student administration activities into one web-based platform. Role-based access, a centralized MySQL database, attendance and result management, fee tracking, admission requests and bKash sandbox integration provide a foundation for digital academic administration.
+
+The project demonstrates the integration of a JavaScript-based frontend, PHP backend and MySQL relational database to support a practical Student Management System.
+
+---
+
+<div align="center">
+
+<table>
+<tr><td align="center" bgcolor="#102A43">
+
+## <font color="#FFFFFF">END OF PROJECT DOCUMENTATION</font>
+
+<font color="#D9EAF7">EDUTRACK PRO — STUDENT MANAGEMENT SYSTEM</font>
+
+<font color="#FFFFFF">STUDENT ID: 251031021&nbsp; | &nbsp;CSE&nbsp; | &nbsp;UG BATCH: 34</font>
+
+</td></tr>
+</table>
+
+</div>
